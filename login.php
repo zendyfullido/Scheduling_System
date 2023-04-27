@@ -2,7 +2,7 @@
 <html lang="en">
 <?php 
 session_start();
-include('admin/db_connect.php');
+include('./db_connect.php');
 ob_start();
 ob_end_flush();
 ?>
@@ -16,7 +16,7 @@ ob_end_flush();
 <?php include('./header.php'); ?>
 <?php 
 if(isset($_SESSION['login_id']))
-header("location:index.php");
+header("location:index.php?page=home");
 
 ?>
 
@@ -25,19 +25,56 @@ header("location:index.php");
 	body{
 		width: 100%;
 	    height: calc(100%);
-		position:fixed;
+	    /*background: #007bff;*/
 	}
-	#main{
-		width: calc(100%);
-	    height: calc(100%);
-		display:flex;
-		align-items:center;
-		justify-content:center
+	main#main{
+		width:100%;
+		height: calc(100%);
+		background:white;
 	}
-	#login{
-		
+	#login-right{
+		position: absolute;
+		right:0;
+		width:40%;
+		height: calc(100%);
+		background:white;
+		display: flex;
+		align-items: center;
 	}
-	
+	#login-left{
+		position: absolute;
+		left:0;
+		width:60%;
+		height: calc(100%);
+		background:#59b6ec61;
+		display: flex;
+		align-items: center;
+		background: url(assets/uploads/<?php echo $_SESSION['system']['cover_img'] ?>);
+	    background-repeat: no-repeat;
+	    background-size: cover;
+	}
+	#login-right .card{
+		margin: auto;
+		z-index: 1
+	}
+	.logo {
+    margin: auto;
+    font-size: 8rem;
+    background: white;
+    padding: .5em 0.7em;
+    border-radius: 50% 50%;
+    color: #000000b3;
+    z-index: 10;
+}
+div#login-right::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(100%);
+    height: calc(100%);
+    background: #000000e0;
+}
 
 </style>
 
@@ -45,15 +82,21 @@ header("location:index.php");
 
 
   <main id="main" class=" bg-dark">
-  		<div id="login" class="col-md-4">
-  			<div class="card">
+  		<div id="login-left">
+  		</div>
+
+  		<div id="login-right">
+  			<div class="card col-md-8">
   				<div class="card-body">
   						
   					<form id="login-form" >
-					  <h4><b>Welcome To Faculty Scheduling System</b></h4>
   						<div class="form-group">
-  							<label for="id_no" class="control-label">Please enter your Faculty ID No.</label>
-  							<input type="text" id="id_no" name="id_no" class="form-control">
+  							<label for="username" class="control-label">Username</label>
+  							<input type="text" id="username" name="username" class="form-control">
+  						</div>
+  						<div class="form-group">
+  							<label for="password" class="control-label">Password</label>
+  							<input type="password" id="password" name="password" class="form-control">
   						</div>
   						<center><button class="btn-sm btn-block btn-wave col-md-4 btn-primary">Login</button></center>
   					</form>
@@ -75,7 +118,7 @@ header("location:index.php");
 		if($(this).find('.alert-danger').length > 0 )
 			$(this).find('.alert-danger').remove();
 		$.ajax({
-			url:'admin/ajax.php?action=login_faculty',
+			url:'ajax.php?action=login',
 			method:'POST',
 			data:$(this).serialize(),
 			error:err=>{
@@ -85,9 +128,9 @@ header("location:index.php");
 			},
 			success:function(resp){
 				if(resp == 1){
-					location.href ='index.php';
+					location.href ='index.php?page=home';
 				}else{
-					$('#login-form').prepend('<div class="alert alert-danger">ID Number is incorrect.</div>')
+					$('#login-form').prepend('<div class="alert alert-danger">Username or password is incorrect.</div>')
 					$('#login-form button[type="button"]').removeAttr('disabled').html('Login');
 				}
 			}

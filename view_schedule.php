@@ -1,4 +1,4 @@
-<?php include 'admin/db_connect.php' ?>
+<?php include 'db_connect.php' ?>
 <?php
 if(isset($_GET['id'])){
 	$qry = $conn->query("SELECT * FROM schedules where id=".$_GET['id'])->fetch_array();
@@ -20,6 +20,8 @@ if(isset($_GET['id'])){
 	<div class="row">
 		<div class="col-md-12">
 			<button class="btn float-right btn-secondary" type="button" data-dismiss="modal">Close</button>
+			<button class="btn float-right btn-danger mr-2" type="button" id="delete_schedule">Delete</button>
+			<button class="btn float-right btn-primary mr-2" type="button" id="edit">Edit</button>
 		</div>
 	</div>
 </div>
